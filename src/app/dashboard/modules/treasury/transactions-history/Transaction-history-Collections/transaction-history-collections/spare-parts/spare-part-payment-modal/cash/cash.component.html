@@ -1,0 +1,43 @@
+<div class="row mt-3">
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="mdtext">Paid Amount </label>
+      <div class="form-control mt-2 mdtext">
+        {{ detailsItem?.collectedAmount ? detailsItem?.collectedAmount : 0000 }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="mdtext">Currency </label>
+      <div class="form-control mt-2 mdtext">
+        {{ detailsItem?.currency[0]?.lookupName }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <label class="mdtext">Value in JOD</label>
+      <div class="form-control mt-2 mdtext">
+        {{
+          detailsItem?.collectedAmountJOD
+            ? detailsItem?.collectedAmountJOD
+            : 0000
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  -->
+<div class="row mt-3">
+  <div class="col-md-5">
+    <div class="form-group">
+      <label class="mdtext">Payer name</label>
+      <div class="form-control mt-2 mdtext">
+        {{ detailsItem?.createdByName?.fullName }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-7"></div>
+</div>

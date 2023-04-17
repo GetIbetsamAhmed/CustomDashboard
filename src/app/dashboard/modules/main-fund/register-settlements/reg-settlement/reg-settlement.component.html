@@ -1,0 +1,243 @@
+<div class="page-layout">
+  <h3 class="heading-text">Sessions List</h3>
+  <form [formGroup]="sessionFilterForm">
+    <div class="row align-items-stretch">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="input-group search-box h-100">
+          <button class="btn" type="button">
+            <i class="fa-solid fa-search"></i>
+          </button>
+          <input type="text" class="form-control" formControlName="register" placeholder="Register Name or No." />
+          <button *ngIf="sessionFilterForm.controls['register'].value !==''" class="btn" type="button" (click)="resetRegisterNo()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <ng-select class="flex-grow-1 mt-3 mt-sm-0" formControlName="branch" placeholder="Branch Name" [items]="branchesList" bindLabel="branchName" bindValue="branchId">
+        </ng-select>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <ng-select class="flex-grow-1 mt-3 mt-md-0" formControlName="createdBy" placeholder="Employee" [items]="employeesList" bindLabel="fullName" bindValue="userId">
+        </ng-select>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 position-relative">
+        <i *ngIf="sessionFilterForm.controls['date'].value.length" class="fa-solid fa-times" style="position:absolute;top:15px;right:30px;cursor:pointer" (click)="resetDate()"></i>
+        <input type="text"
+               style="height:46px"
+               formControlName="date"
+               placeholder="Select Date"
+               class="form-control mt-3 mt-lg-0"
+               bsDaterangepicker
+               [bsConfig]="{ containerClass: 'theme-red',isAnimated: true,showClearButton: true}"
+               placement="left">
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-3">
+        <ng-select class="flex-grow-1" formControlName="status" placeholder="Status" [items]="statusList" bindLabel="description" bindValue="id">
+        </ng-select>
+      </div>
+    </div>
+  </form>
+  <div class="d-flex justify-content-end">
+    <p class="total-records">Total No. {{ totalRecords }}</p>
+  </div>
+  <!-- table -->
+  <div class="row">
+    <div class="col-md-12" *ngIf="sessionList; let sessionList; else: loading">
+      <div class="card-table mt-2 register-sessions-table">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  <button class="btn" [disabled]="sessionList?.length == 0" (click)="sortByBranch()">
+                    Branch
+                    <i class="fa-solid fa-arrow-up-long" [class.active]="sort == 2"></i>
+                    <i class="fa-solid fa-arrow-down-long" [class.active]="sort == 3"></i>
+                  </button>
+                </th>
+                <th scope="col">
+                  <button class="btn" [disabled]="sessionList?.length == 0" (click)="sortByRegisterNo()">
+                    Register No.
+                    <i class="fa-solid fa-arrow-up-long" [class.active]="sort == 4"></i>
+                    <i class="fa-solid fa-arrow-down-long" [class.active]="sort == 5"></i>
+                  </button>
+                </th>
+                <th scope="col">
+                  <button class="btn" [disabled]="sessionList?.length == 0" (click)="sortByRegisterName()">
+                    Register Name
+                    <i class="fa-solid fa-arrow-up-long" [class.active]="sort == 6"></i>
+                    <i class="fa-solid fa-arrow-down-long" [class.active]="sort == 7"></i>
+                  </button>
+                </th>
+                <th scope="col">
+                  <button class="btn" [disabled]="sessionList?.length == 0" (click)="sortByDate()">
+                    Request Date
+                    <i class="fa-solid fa-arrow-up-long" [class.active]="sort == 8"></i>
+                    <i class="fa-solid fa-arrow-down-long" [class.active]="sort == 9"></i>
+                  </button>
+                </th>
+                <th scope="col">
+                  <button class="btn" [disabled]="sessionList?.length == 0" (click)="sortByRequested()">
+                    Requested By
+                    <i class="fa-solid fa-arrow-up-long" [class.active]="sort == 10"></i>
+                    <i class="fa-solid fa-arrow-down-long" [class.active]="sort == 11"></i>
+                  </button>
+                </th>
+                <th scope="col">
+                  <button class="btn" [disabled]="sessionList?.length == 0" (click)="sortByStatus()">
+                    Status
+                    <i class="fa-solid fa-arrow-up-long" [class.active]="sort == 12"></i>
+                    <i class="fa-solid fa-arrow-down-long" [class.active]="sort == 13"></i>
+                  </button>
+                </th>
+                <th scope="col">
+                  <button class="btn" [disabled]="sessionList?.length == 0">
+                    Action
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of sessionList">
+                <td>{{ item?.branch?.branchName}}</td>
+                <td>{{ item?.register.registerId}}</td>
+                <td>{{ item?.register.registersName}}</td>
+                <td>{{ item?.createdAt | date }}</td>
+                <td>{{ item?.createdBy?.fullName }}</td>
+                <td>
+                  <div class="status-tag" [ngStyle]="{
+                    'background-color': item?.statusObj?.lookupBGColor,
+                    color: item?.statusObj?.lookupTextColor
+                  }">
+                    {{ item?.statusObj?.translations[0]?.lookupName }}
+                  </div>
+                </td>
+
+                <td>
+                  <div class="btn-group remove-caret-dropdown" dropdown>
+                    <div class="dot-details cursor-pointer dropdown-toggle" dropdownToggle aria-controls="dropdown-basic">
+                      <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right custom-session-dd"
+                        role="menu" aria-labelledby="button-alignment">
+                        <li *ngIf="item.status == status.Closed || item.status == status.Partial" role="menuitem">
+                          <button type="button" class="dropdown-item"
+                                  (click)="handleSettle(item?.registerSessionId)">
+                            Settle
+                          </button>
+                        </li>
+                        <li role="menuitem"><button type="button" class="dropdown-item" (click)="openModal(content,item)">Force Close</button></li>
+                        <li role="menuitem"><button type="button" class="dropdown-item">View Register Details</button></li>
+                        <li role="menuitem"><button type="button" class="dropdown-item">View Session Details</button></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="not-found" *ngIf="sessionList?.length == 0">
+          <app-not-found></app-not-found>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <ng-template #loading>
+        <div>
+          <app-loading></app-loading>
+        </div>
+      </ng-template>
+    </div>
+    <div class="col-md-6" [hidden]="sessionList?.length == 0">
+      <h6 class="showing">
+        Showing
+        <span>
+          {{ (pageNo + 1) * 6 - 5 }} -
+          {{ sessionList?.length == 6 ? (pageNo + 1) * 6 : totalRecords }}
+        </span>
+        from <span> {{ totalRecords }} </span> data
+      </h6>
+    </div>
+    <div class="col-md-6" [hidden]="totalRecords < 7">
+      <ul class="pagination">
+        <li class="page-item" *ngFor="let page of pages">
+          <button class="page-link" (click)="setPage(page)" [ngClass]="{ active: pageNo === page }"
+                  [disabled]="pageNo === page">
+            {{ page + 1 }}
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!--Modal Popup-->
+<ng-template #content let-modal>
+  <div class="fc-modal p-4">
+    <div class="modal-header p-0">
+      <h4 class="modal-title fw-bolder pb-3" ngbAutofocus>Force Close</h4>
+    </div>
+    <div class="modal-body p-0">
+      <div class="body-layout mt-3">
+        <div class="d-flex flex-column">
+          <h6 class="dark-gray fw-bolder">Branch Name</h6>
+          <p class="light-gray">{{sessionDetails?.branch?.branchName}}</p>
+        </div>
+        <div class="d-flex flex-column">
+          <h6 class="dark-gray fw-bolder">Register Name</h6>
+          <p class="light-gray">{{sessionDetails?.register?.registersName}}</p>
+        </div>
+        <div class="d-flex flex-column">
+          <h6 class="dark-gray fw-bolder">Register No</h6>
+          <p class="light-gray">{{sessionDetails?.register?.registerId}}</p>
+        </div>
+        <div class="d-flex flex-column">
+          <h6 class="dark-gray fw-bolder">Session No</h6>
+          <p class="light-gray">{{sessionDetails?.registerSessionId}}</p>
+        </div>
+        <div class="d-flex flex-column">
+          <h6 class="dark-gray fw-bolder">Employee</h6>
+          <p class="light-gray">{{sessionDetails?.createdBy?.fullName}}</p>
+        </div>
+      </div>
+      <h5 class="dark-gray fw-bolder my-4">You are about to force close the following register</h5>
+      <div class="row my-5">
+        <!--NOTE:=> [cr,cs,dr] is concated to make value unique for radio because due to same value of cr and cs both radio input are selected once-->
+        <div class="col-md-4">
+          <div class="form-check form-check-inline">
+            <input type="radio" id="close" [value]="'cr_'+ sessionDetails?.register?.registerId" [(ngModel)]="radioValue" class="form-check-input" />
+            <label class="form-check-label" for="close">Close Register for all day </label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-check form-check-inline">
+            <input type="radio" id="session" [value]="'cs_'+sessionDetails?.registerSessionId" [(ngModel)]="radioValue"
+                   class="form-check-input" [disabled]="sessionDetails.status == status.Closed" />
+            <label class="form-check-label" for="session">Close Session</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-check form-check-inline">
+            <input type="radio" [disabled]="registerDetails.status == 2002" id="register"
+                   [value]="'dr_'+ sessionDetails?.register?.registerId"
+                   [(ngModel)]="radioValue" class="form-check-input" />
+            <label class="form-check-label" for="register">Deactivate Register</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer p-0">
+      <div class="btns-group">
+        <button type="button" class="btn btn-cancel" (click)="modal.close('Save click')">Cancel</button>
+        <button type="button" class="btn btn-save" (click)="handleSubmit()">Submit</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #success>
+  <div class="modal-body">
+    <h5 *ngIf="response?.Errors" class="text-danger m-0 py-5 text-center"><i class="fa-regular fa-circle-xmark me-2"></i>{{response?.Errors[0].ErrorMessageEn}}</h5>
+    <h5 *ngIf="response?.isSuccess" class="m-0 py-5 text-center"><i class="green-clr fa-regular fa-circle-check me-2"></i>{{message}}</h5>
+  </div>
+</ng-template>

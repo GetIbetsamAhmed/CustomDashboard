@@ -1,0 +1,272 @@
+<div class="card-Box">
+  <!-- head -->
+  <!-- first section -->
+  <div class="flex-between">
+    <div class="headingText">Collection Details</div>
+    <div class="btn-edit" (click)="openModalPayment()">View Details</div>
+  </div>
+
+  <div class="separator"></div>
+
+  <!-- second section -->
+
+  <!-- third Section -->
+
+  <div class="row" style="margin-top: 25px">
+    <!-- grand amount -->
+    <div class="col-md-6">
+      <div class="flex-start" style="gap: 15px">
+        <div class="mdtext">Grand Paid</div>
+        <div class="amountButton mdtext">
+          {{ serviceCollectionCenterDetails?.grandPaid + " " + "JD" }}
+        </div>
+      </div>
+    </div>
+
+    <!-- deposit amounts -->
+    <div class="col-md-6">
+      <div class="flex-start" style="gap: 15px">
+        <div class="mdtext">Grand Amount</div>
+        <div class="amountButton mdtext">
+          {{ serviceCollectionCenterDetails?.grandAmount + " " + "JD" }}
+        </div>
+      </div>
+    </div>
+
+    <!-- difference amounts -->
+    <!-- <div class="flex-between" style="gap: 15px" hidden>
+      <div class="mdtext">Grand Amount</div>
+      <div class="amountButton mdtext">
+        {{ serviceCollectionCenterDetails?.grandAmount + " " + "JD" }}
+      </div>
+    </div> -->
+  </div>
+</div>
+
+<!-- cards -->
+<div class="flex-two mt-3" style="gap: 28px">
+  <div class="card1">
+    <div class="headingText">Customer Details</div>
+    <div class="flex-start mt-2">
+      <div class="profile" *ngIf="newName">
+        {{
+          (newName[0] | slice : 0 : 1) +
+            " " +
+            (newName[newName.length - 1] | slice : 0 : 1)
+        }}
+      </div>
+      <div class="flex-column">
+        <div class="mdtext">
+          {{ serviceCollectionCenterDetails?.customer?.customerName }}
+        </div>
+        <div class="smText">
+          {{ serviceCollectionCenterDetails?.customer?.email }}
+        </div>
+      </div>
+    </div>
+    <div class="flex-start mt-2">
+      <div class="profile" style="visibility: hidden"></div>
+      <div class="flex-column">
+        <div class="mdtext">Customer No</div>
+        <div class="smText">
+          {{ serviceCollectionCenterDetails?.customer?.mobile }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card2">
+    <!-- head -->
+    <!-- first section -->
+    <div class="flex-between">
+      <div class="headingText">Vehicle Details</div>
+    </div>
+
+    <div class="separator"></div>
+
+    <!-- second section -->
+
+    <!-- third Section -->
+
+    <div class="row" style="margin-top: 25px">
+      <!-- grand amount -->
+      <div class="col-md-6">
+        <div class="flex-column" style="gap: 15px">
+          <div class="mdtext">Sales Consultant</div>
+          <div class="smText">
+            {{ serviceCollectionCenterDetails?.salesConsultant?.fullName }}
+          </div>
+        </div>
+      </div>
+      <!-- deposit amounts -->
+      <div class="col-md-6">
+        <div class="flex-column" style="gap: 15px">
+          <div class="mdtext">Sales order No</div>
+          <div class="smText">
+            {{
+              serviceCollectionCenterDetails?.sparePartsSalesOrderOpportunityNo
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  -->
+
+<!-- input search box -->
+<div class="row applyMargin">
+  <div class="col-md-5"></div>
+  <div class="col-md-5"></div>
+  <div class="col-md-2 d-flex justify-content-end btnadd"></div>
+
+  <div class="col-md-6"></div>
+  <div class="col-md-6 text-end">
+    <!-- <div class="total">
+          <p style="color: #dc3545">Total No. {{ totalRecords }}</p>
+        </div> -->
+  </div>
+</div>
+
+<!-- table 1 -->
+<div class="row">
+  <div class="col-md-12" *ngIf="partsList; let partsList; else: loading">
+    <div class="card-table mt-2 p-4">
+      <div class="flex-between">
+        <div class="lgText">Spare Parts</div>
+        <div class="total">
+          <p style="color: #dc3545">Total No. {{ totalRecordsParts }}</p>
+        </div>
+      </div>
+      <div class="separator2"></div>
+
+      <div class="table-responsive mt-2">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Part No
+                </button>
+              </th>
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Description
+                </button>
+              </th>
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Qty
+                </button>
+              </th>
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Unit Price
+                </button>
+              </th>
+
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Discount
+                </button>
+              </th>
+
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Net
+                </button>
+              </th>
+
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Tax
+                </button>
+              </th>
+
+              <th scope="col">
+                <button class="btn" [disabled]="partsList?.length == 0">
+                  Total Price
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of partsList">
+              <td>{{ item?.partNo }}</td>
+              <td>{{ item?.description }}</td>
+              <td>{{ item?.qty }}</td>
+              <td>{{ item?.unitPrice }}</td>
+              <td>{{ item?.discount }}</td>
+              <td>{{ item?.net }}</td>
+              <td>{{ item?.tax }}</td>
+
+              <td>
+                {{ item?.totalPrice }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="not-found" *ngIf="partsList?.length == 0">
+        <app-not-found></app-not-found>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-6" [hidden]="partsList?.length == 0">
+          <div class="flex-start" style="gap: 15px">
+            <div class="mdtext">Total Price for Spare Parts</div>
+            <div class="amountButton mdtext">
+              {{ partsData?.info?.totaAmount + " " + "JD" }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" [hidden]="totalRecordsParts < 2">
+          <ul class="pagination">
+            <li class="page-item" *ngFor="let page of pagesParts">
+              <button
+                class="page-link"
+                (click)="setPageParts(page)"
+                [ngClass]="{ active: pageNoParts === page }"
+                [disabled]="pageNoParts === page"
+              >
+                {{ page + 1 }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <ng-template #loading>
+      <div>
+        <app-loading></app-loading>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- <div class="flex-end mt-3">
+    <p style="color: #dc3545">
+      Invoice No. {{ serviceCollectionCenterDetails?.orderInvoiceSerial }}
+    </p>
+  </div> -->
+
+<div class="card-Box mt-4">
+  <!-- head -->
+
+  <div class="headingText">Sales Note</div>
+  <div class="greyBox mdtext mt-3">
+    {{ serviceCollectionCenterDetails?.salesNote }}
+  </div>
+</div>
+
+<div class="flex-end mt-3">
+  <button
+    [routerLink]="['/transactions-history']"
+    class="btn dropdownButton"
+    type="button"
+    id="dropdownMenuButton"
+  >
+    Close
+  </button>
+</div>

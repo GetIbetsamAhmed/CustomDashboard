@@ -1,0 +1,280 @@
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="flex-between">
+        <div class="payment-head">
+          <h3>Receipt Details</h3>
+        </div>
+        <div style="color: #dc3545">
+          <p>Receipt No. {{ collectionId }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="separator"></div>
+
+    <div class="flex-between" style="margin-top: 25px">
+      <div class="headingText">Collected In</div>
+    </div>
+
+    <!-- second section -->
+
+    <!-- third Section -->
+
+    <div class="row" style="margin-top: 25px">
+      <!-- grand amount -->
+      <div class="col-md-3" style="gap: 15px">
+        <div class="mdtext">Branch</div>
+        <div class="smText">{{ detailsItem?.branch?.branchName }}</div>
+      </div>
+
+      <!-- deposit amounts -->
+      <div class="col-md-3" style="gap: 15px">
+        <div class="mdtext">Register name</div>
+        <div class="smText">{{ detailsItem?.register?.registersName }}</div>
+      </div>
+
+      <!-- difference amounts -->
+      <div class="col-md-3" style="gap: 15px">
+        <div class="mdtext">Register No</div>
+        <div class="smText">{{ detailsItem?.register?.registerId }}</div>
+      </div>
+
+      <div class="col-md-3"></div>
+    </div>
+    <!-- collected by -->
+
+    <div class="flex-between" style="margin-top: 25px">
+      <div class="headingText">Collected By</div>
+    </div>
+
+    <!-- second section -->
+
+    <!-- third Section -->
+
+    <div class="row" style="margin-top: 25px">
+      <!-- grand amount -->
+      <div class="col-md-3" style="gap: 15px">
+        <div class="mdtext">Employee</div>
+        <div class="smText">{{ detailsItem?.collectedBy?.fullName }}</div>
+      </div>
+
+      <!-- deposit amounts -->
+      <div class="col-md-3" style="gap: 15px">
+        <div class="mdtext">Date</div>
+        <div class="smText">{{ detailsItem?.collectionAt | date }}</div>
+      </div>
+
+      <!-- difference amounts -->
+      <div class="col-md-3" style="gap: 15px">
+        <div class="mdtext">Time</div>
+        <div class="smText">
+          {{ detailsItem?.collectionAt | date : "shortTime" }}
+        </div>
+      </div>
+
+      <div class="col-md-3"></div>
+    </div>
+
+    <div class="separator" style="margin-top: 25px"></div>
+
+    <div class="col-md-12">
+      <div class="card-payment">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="total-card">
+              <p>Grand Amount</p>
+              <div class="total">{{ detailsItem?.grandAmount }} JD</div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <!-- <div class="total-card justify-content-end">
+                <p>Remaining Amount</p>
+                <div class="total2">
+                  {{ remainingAmount | number : "1.2-2" }} JD
+                </div>
+              </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div>
+        <!-- <h4 class="paytitle">Payment Types :</h4> -->
+      </div>
+      <div class="tab-nav">
+        <div class="payitem">
+          <button
+            type="button"
+            [disabled]="
+              !detailsItem?.ordersCashCollections[0]?.collectedAmountJOD
+            "
+            class="btn"
+            (click)="chooseTab(1)"
+            [class.active]="selected == 1"
+          >
+            <div class="imag">
+              <img src="assets/images/payment/cash.png" alt="" />
+            </div>
+            <h5>Cash</h5>
+          </button>
+          <h6>
+            {{
+              detailsItem?.ordersCashCollections[0]?.collectedAmountJOD
+                ? detailsItem?.ordersCashCollections[0]?.collectedAmountJOD +
+                  "" +
+                  "JD"
+                : "0000"
+            }}
+          </h6>
+        </div>
+        <div class="payitem">
+          <button
+            type="button"
+            [disabled]="
+              !detailsItem?.ordersChequeCollection?.chequeCollectionJod
+            "
+            class="btn"
+            (click)="chooseTab(2)"
+            [class.active]="selected == 2"
+          >
+            <div class="imag">
+              <img src="assets/images/payment/cheque.png" alt="" />
+            </div>
+            <h5>Cheque</h5>
+          </button>
+          <h6>
+            {{
+              detailsItem?.ordersChequeCollection?.chequeCollectionJod
+                ? detailsItem?.ordersChequeCollection?.chequeCollectionJod +
+                  " " +
+                  "JD"
+                : "0000"
+            }}
+          </h6>
+        </div>
+        <div class="payitem">
+          <button
+            type="button"
+            [disabled]="
+              !detailsItem?.ordersCardsCollection[0]?.cardCollectionJod
+            "
+            class="btn"
+            (click)="chooseTab(3)"
+            [class.active]="selected == 3"
+          >
+            <div class="imag">
+              <img src="assets/images/payment/visa.png" alt="" />
+            </div>
+            <h5>Visa Card</h5>
+          </button>
+          <h6>
+            {{
+              detailsItem?.ordersCardsCollection[0]?.cardCollectionJod
+                ? detailsItem?.ordersCardsCollection[0]?.cardCollectionJod +
+                  "" +
+                  "JD"
+                : "0000"
+            }}
+          </h6>
+        </div>
+        <div class="payitem">
+          <button
+            type="button"
+            [disabled]="
+              !detailsItem?.ordersCardsCollection[1]?.cardCollectionJod
+            "
+            class="btn"
+            (click)="chooseTab(4)"
+            [class.active]="selected == 4"
+          >
+            <div class="imag">
+              <img src="assets/images/payment/master.png" alt="" />
+            </div>
+            <h5>Mastercard</h5>
+          </button>
+          <h6>
+            {{
+              detailsItem?.ordersCardsCollection[1]?.cardCollectionJod
+                ? detailsItem?.ordersCardsCollection[1]?.cardCollectionJod +
+                  "" +
+                  "JD"
+                : "0000"
+            }}
+          </h6>
+        </div>
+        <div class="payitem">
+          <button
+            type="button"
+            class="btn"
+            [disabled]="
+              !detailsItem?.ordersCardsCollection[2]?.cardCollectionJod
+            "
+            (click)="chooseTab(5)"
+            [class.active]="selected == 5"
+          >
+            <div class="imag">
+              <img src="assets/images/payment/express.png" alt="" />
+            </div>
+            <h5>American Express</h5>
+          </button>
+          <h6>
+            {{
+              detailsItem?.ordersCardsCollection[2]?.cardCollectionJod
+                ? detailsItem?.ordersCardsCollection[2]?.cardCollectionJod +
+                  "" +
+                  "JD"
+                : "0000"
+            }}
+          </h6>
+        </div>
+        <!-- && details?.customer.onAccountAllowed -->
+        <div class="payitem">
+          <button
+            type="button"
+            class="btn btnacount"
+            (click)="chooseTab(6)"
+            [class.active]="selected == 6"
+            disabled
+          >
+            <!-- <div class="imag"><img src="assets/images/payment/express.png" alt=""></div> -->
+            <h5>On Customer Account</h5>
+          </button>
+          <h6>0000</h6>
+        </div>
+      </div>
+    </div>
+
+    <app-cash
+      *ngIf="selected == 1"
+      [detailsItem]="detailsItem?.ordersCashCollections[0]"
+    ></app-cash>
+    <app-cheque
+      *ngIf="selected == 2"
+      [detailsItem]="detailsItem?.ordersChequeCollection"
+    ></app-cheque>
+    <app-visa
+      *ngIf="selected == 3"
+      [detailsItem]="detailsItem?.ordersCardsCollection[0]"
+    ></app-visa>
+    <app-master
+      *ngIf="selected == 4"
+      [detailsItem]="detailsItem?.ordersCardsCollection[1]"
+    ></app-master>
+    <app-express
+      *ngIf="selected == 5"
+      [detailsItem]="detailsItem?.ordersCardsCollection[2]"
+    ></app-express>
+
+    <div class="col-md-12">
+      <div class="btns-group my-2">
+        <button
+          type="button"
+          class="btn btn-save mt-2"
+          (click)="activeModal.close('Close click')"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
